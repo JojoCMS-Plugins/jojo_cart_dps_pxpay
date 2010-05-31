@@ -43,7 +43,7 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
             }
         }
         $smarty->assign('cardtypes', $cardtypes);
-        $options[] = array('id' => 'dps', 'label' => 'Pay now by Credit card via sucure payment provider DPS/payment express'.implode(', ', $cardimages), 'html' => $smarty->fetch('jojo_cart_dps_pxpay_checkout.tpl'));
+        $options[] = array('id' => 'dps', 'label' => 'Pay now by Credit card via secure payment provider DPS/payment express'.implode(', ', $cardimages), 'html' => $smarty->fetch('jojo_cart_dps_pxpay_checkout.tpl'));
         return $options;
     }
 
