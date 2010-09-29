@@ -6,7 +6,7 @@
     <p>Click the button below to be redirected to our secure payment provider.</p>
 </div>
 <div style="text-align: center;">
-  <input type="submit" name="pay" id="pay" value="Pay by Credit card" onclick="if (true){ldelim}$('#pay').attr('disabled',true);paymentform.submit();{rdelim}else{ldelim}return false;{rdelim}" />
+  <input type="submit"  class="button" name="pay" id="pay" value="Pay by Credit card" onclick="if (true){ldelim}$('#pay').attr('disabled',true);paymentform.submit();{rdelim}else{ldelim}return false;{rdelim}" />
 </div>
 
 </form>
