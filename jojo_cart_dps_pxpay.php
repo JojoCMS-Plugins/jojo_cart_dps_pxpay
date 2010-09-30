@@ -138,7 +138,7 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
             }
 
             # the following are the fields available in the PxPayResponse object
-            $Success           = $rsp->getSuccess();   # =1 when request succeeds
+            $Success           = ($rsp->getSuccess() == 1);   # =1 when request succeeds
             $Retry             = $rsp->getRetry();     # =1 when a retry might help
             $StatusRequired    = $rsp->getStatusRequired();      # =1 when transaction "lost"
             $AmountSettlement  = $rsp->getAmountSettlement();
@@ -165,9 +165,9 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
                              'Response'           => $ResponseText
                              );
 
-      $message = ($Success) ? "Thank you for your payment via $CardName Credit Card.": '';
+            $message = ($Success) ? "Thank you for your payment via $CardName Credit Card.": '';
 
-      return array(
+            return array(
                         'success' => $Success,
                         'receipt' => $receipt,
                         'errors'  => $errors,
@@ -187,7 +187,7 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
             $request->setInputCurrency($cart->order['currency']);
             $request->setMerchantReference($cart->token);
             $request->setEmailAddress($cart->fields['Email']);
-            $request->setUrlFail(_SECUREURL.'/cart/checkout/');
+            $request->setUrlFail(_SECUREURL.'/cart/process/'.$cart->token.'/');
             $request->setUrlSuccess(_SECUREURL.'/cart/process/'.$cart->token.'/');
 
             #Call makeResponse of PxPay object to obtain the 3-DES encrypted payment request
