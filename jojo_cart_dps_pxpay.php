@@ -62,7 +62,9 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
             $data = Jojo::selectQuery("SELECT * FROM {cart} WHERE token=? AND status='complete'", $token);
             if (count($data)) {
                 /* redirect to thank you page if the transaction has been processed already */
-                Jojo::redirect(_SECUREURL.'/cart/complete/'.$token.'/', 302);
+                global $page;
+                $languageurlprefix = $page->page['pageid'] ? Jojo::getPageUrlPrefix($page->page['pageid']) : $_SESSION['languageurlprefix'];
+                Jojo::redirect(_SECUREURL.'/' .$languageurlprefix. 'cart/complete/'.$token.'/', 302);
             }
         }
         return true;
@@ -73,6 +75,9 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
 
     function process()
     {
+        global $page;
+        $languageurlprefix = $page->page['pageid'] ? Jojo::getPageUrlPrefix($page->page['pageid']) : $_SESSION['languageurlprefix'];
+        
         define('DPS_URL', 'https://www.paymentexpress.com/pxpay/pxaccess.aspx');
 
         $cart     = call_user_func(array(Jojo_Cart_Class, 'getCart'));
@@ -107,7 +112,7 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
         $data = Jojo::selectQuery("SELECT * FROM {cart} WHERE token=? AND status='complete'", $token);
         if (count($data)) {
             /* redirect to thank you page if the transaction has been processed already */
-            Jojo::redirect(_SECUREURL.'/cart/complete/'.$token.'/', 302);
+            Jojo::redirect(_SECUREURL.'/' .$languageurlprefix. 'cart/complete/'.$token.'/', 302);
         }
 
         /* include the PxPay functions */
@@ -124,6 +129,11 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
 
         if ($result) {
             /* This code is called by DPS directly to notify of a result. The user is also redirected back here, but they should be redirected to the thank you page before this code runs */
+                
+            /* 
+            We only need and should process the order once, so change status to processing to block 2nd ping(or user click) happening at the same time */
+            Jojo::updateQuery("UPDATE {cart} SET status=? WHERE token=? LIMIT 1", array('processing', $token));
+            
             $enc_hex = $result;
             #getResponse method in PxPay object returns PxPayResponse object
             #which encapsulates all the response data
@@ -187,8 +197,8 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
             $request->setInputCurrency($cart->order['currency']);
             $request->setMerchantReference($cart->token);
             $request->setEmailAddress($cart->fields['Email']);
-            $request->setUrlFail(_SECUREURL.'/cart/process/'.$cart->token.'/');
-            $request->setUrlSuccess(_SECUREURL.'/cart/process/'.$cart->token.'/');
+            $request->setUrlFail(_SECUREURL.'/' .$languageurlprefix. 'cart/process/'.$cart->token.'/');
+            $request->setUrlSuccess(_SECUREURL.'/' .$languageurlprefix. 'cart/process/'.$cart->token.'/');
 
             #Call makeResponse of PxPay object to obtain the 3-DES encrypted payment request
             $request_string = $pxpay->makeRequest($request);
