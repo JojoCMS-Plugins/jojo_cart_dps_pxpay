@@ -193,7 +193,7 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
             $request->setTxnData1($cart->token);
             $request->setTxnData2('');
             $request->setTxnData3('');
-            $request->setTxnType("Purchase");
+            $request->setTxnType(Jojo::getOption('dps_transaction_type', 'Purchase'));
             $request->setInputCurrency($cart->order['currency']);
             $request->setMerchantReference($cart->token);
             $request->setEmailAddress($cart->fields['Email']);

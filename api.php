@@ -35,6 +35,18 @@ $_options[] = array(
 );
 
 $_options[] = array(
+    'id'          => 'dps_transaction_type',
+    'category'    => 'Cart',
+    'label'       => 'DPS Transaction types',
+    'description' => 'A comma separated list of card types that are accepted by DPS (visa, mastercard, amex, diners)',
+    'type'        => 'radio',
+    'default'     => 'Purchase',
+    'options'     => 'Purchase,Auth,Complete,Refund,Validate',
+    'plugin'      => 'jojo_cart_dps'
+);
+
+
+$_options[] = array(
     'id'          => 'dps_username',
     'category'    => 'Cart',
     'label'       => 'DPS username',
