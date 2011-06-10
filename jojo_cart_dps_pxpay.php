@@ -218,7 +218,7 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
 
             $response = new MifMessage($request_string);
             $url = $response->get_element_text("URI");
-            $valid = $response->get_attribute("valid");//echo $request_string;echo '<br>';print_r($request);echo '<br>';print_r($pxpay);exit;
+            $valid = $response->get_attribute("valid");
             if ($valid == 1) {
                Jojo::redirect($url, 302);
             } else {
