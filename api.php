@@ -24,6 +24,17 @@ if (class_exists(Jojo_Cart_Class)) {
 }
 
 $_options[] = array(
+    'id'          => 'dps_currencies',
+    'category'    => 'Cart',
+    'label'       => 'DPS Currencies',
+    'description' => 'A comma separated list of currencies supported by DPS. Multi-currency is currently only supported via BNZ bank, and it must be pre-arranged with them.',
+    'type'        => 'text',
+    'default'     => 'NZD',
+    'options'     => '',
+    'plugin'      => 'jojo_cart_dps'
+);
+
+$_options[] = array(
     'id'          => 'dps_card_types',
     'category'    => 'Cart',
     'label'       => 'DPS Card types',

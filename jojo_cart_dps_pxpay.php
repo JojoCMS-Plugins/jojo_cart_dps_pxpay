@@ -14,15 +14,28 @@
  * @link    http://www.jojocms.org JojoCMS
  */
 
-define('_DPS_CURRENCY', 'NZD'); //Currently hard-coded to NZD
+define('_DPS_CURRENCY', 'NZD'); //DEPRECATED - please use the getPaymentOptions method instead
 
 class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
 {
+    /* checks if a currency is supported by DPS  */
+    function isValidCurrency($currency)
+    {
+        $currencies_str = Jojo::getOption('dps_currencies', 'NZD');
+        $currencies = explode(',', $currencies_str);
+        /* remove whitespace */
+        foreach ($currencies as &$c) {
+            $c = trim($c);
+            if (strtoupper($currency) == strtoupper($c)) return true;
+        }
+        return false;
+    }
+    
     function getPaymentOptions()
     {
         /* ensure the order currency is the same as DPS currency */
         $currency = call_user_func(array(Jojo_Cart_Class, 'getCartCurrency'));
-        if ($currency != _DPS_CURRENCY) return array();
+        if (!self::isValidCurrency($currency)) return array();
 
         global $smarty;
         $options = array();
@@ -88,11 +101,11 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
 
         /* ensure the order currency is the same as DPS currency */
         $currency = call_user_func(array(Jojo_Cart_Class, 'getCartCurrency'));
-        if ($currency != _DPS_CURRENCY) {
+        if (!self::isValidCurrency($currency)) {
             return array(
                         'success' => false,
                         'receipt' => '',
-                        'errors'  => array('This plugin is only currently able to process transactions in '._DPS_CURRENCY.'.')
+                        'errors'  => array('This plugin is only currently able to process transactions in '.Jojo::getOption('dps_currencies', 'NZD').'.')
                         );
         }
 
@@ -205,7 +218,7 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
 
             $response = new MifMessage($request_string);
             $url = $response->get_element_text("URI");
-            $valid = $response->get_attribute("valid");
+            $valid = $response->get_attribute("valid");//echo $request_string;echo '<br>';print_r($request);echo '<br>';print_r($pxpay);exit;
             if ($valid == 1) {
                Jojo::redirect($url, 302);
             } else {
