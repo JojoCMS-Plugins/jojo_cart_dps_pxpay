@@ -91,7 +91,7 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
         global $page;
         $languageurlprefix = $page->page['pageid'] ? Jojo::getPageUrlPrefix($page->page['pageid']) : $_SESSION['languageurlprefix'];
         
-        define('DPS_URL', 'https://www.paymentexpress.com/pxpay/pxaccess.aspx');
+        define('DPS_URL', 'https://sec.paymentexpress.com/pxpay/pxaccess.aspx');
 
         $cart     = call_user_func(array(Jojo_Cart_Class, 'getCart'));
         $testmode = call_user_func(array(Jojo_Cart_Class, 'isTestMode'));
