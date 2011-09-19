@@ -41,7 +41,7 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
         $options = array();
 
         /* get available card types (specified in options) */
-        $cardtypes = explode(',', Jojo::getOption('dps_pxpay_card_types', 'visa,mastercard'));
+        $cardtypes = explode(',', Jojo::getOption('dps_card_types', 'visa,mastercard'));
         $cardimages = array();
 
         /* uppercase first letter of each card type */
