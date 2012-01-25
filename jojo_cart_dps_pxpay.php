@@ -99,6 +99,15 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
 
         $errors  = array();
 
+        /* Get visitor details for emailing etc */
+        if (!empty($cart->fields['billing_email'])) {
+            $email = $cart->fields['billing_email'];
+        } elseif (!empty($cart->fields['shipping_email'])) {
+            $email = $cart->fields['shipping_email'];
+        } else {
+            $email = Jojo::either(_CONTACTADDRESS,_FROMADDRESS,_WEBMASTERADDRESS);
+        }
+
         /* ensure the order currency is the same as DPS currency */
         $currency = call_user_func(array(Jojo_Cart_Class, 'getCartCurrency'));
         if (!self::isValidCurrency($currency)) {
@@ -125,7 +134,7 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
         $data = Jojo::selectQuery("SELECT * FROM {cart} WHERE token=? AND status='complete'", $token);
         if (count($data)) {
             /* redirect to thank you page if the transaction has been processed already */
-            Jojo::redirect(_SECUREURL.'/' .$languageurlprefix. 'cart/complete/'.$token.'/', 302);
+            Jojo::redirect(Jojo::either(_SECUREURL, _SITEURL) . '/' .$languageurlprefix. 'cart/complete/'.$token.'/', 302);
         }
 
         /* include the PxPay functions */
@@ -207,9 +216,9 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
             $request->setTxnData2('');
             $request->setTxnData3('');
             $request->setTxnType(Jojo::getOption('dps_transaction_type', 'Purchase'));
-            $request->setInputCurrency($cart->order['currency']);
+            $request->setInputCurrency($currency);
             $request->setMerchantReference($cart->token);
-            $request->setEmailAddress($cart->fields['Email']);
+            $request->setEmailAddress($email);
             $request->setUrlFail(_SECUREURL.'/' .$languageurlprefix. 'cart/process/'.$cart->token.'/');
             $request->setUrlSuccess(_SECUREURL.'/' .$languageurlprefix. 'cart/process/'.$cart->token.'/');
 
