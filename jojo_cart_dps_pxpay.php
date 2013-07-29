@@ -48,11 +48,11 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
         foreach ($cardtypes as $k => $v) {
             $cardtypes[$k] = trim(ucwords($v));
             if ($cardtypes[$k] == 'Visa') {
-                $cardimages[$k] = '<img class="creditcard-icon" src="images/creditcardvisa.gif" alt="Visa" />';
+                $cardimages[$k] = '<img class="icon-image" src="images/creditcardvisa.gif" alt="Visa" />';
             } elseif ($cardtypes[$k] == 'Mastercard') {
-                $cardimages[$k] = '<img class="creditcard-icon" src="images/creditcardmastercard.gif" alt="Mastercard" />';
+                $cardimages[$k] = '<img class="icon-image" src="images/creditcardmastercard.gif" alt="Mastercard" />';
             } elseif ($cardtypes[$k] == 'Amex') {
-                $cardimages[$k] = '<img class="creditcard-icon" src="images/creditcardamex.gif" alt="American Express" />';
+                $cardimages[$k] = '<img class="icon-image" src="images/creditcardamex.gif" alt="American Express" />';
             }
         }
         $smarty->assign('cardtypes', $cardtypes);
