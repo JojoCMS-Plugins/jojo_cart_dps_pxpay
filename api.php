@@ -56,6 +56,16 @@ $_options[] = array(
     'plugin'      => 'jojo_cart_dps'
 );
 
+$_options[] = array(
+    'id'          => 'dps_version',
+    'category'    => 'Cart',
+    'label'       => 'DPS PxPay Version',
+    'description' => '',
+    'type'        => 'radio',
+    'default'     => '1',
+    'options'     => '1,2',
+    'plugin'      => 'jojo_cart_dps'
+);
 
 $_options[] = array(
     'id'          => 'dps_username',

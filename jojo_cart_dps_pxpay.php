@@ -19,7 +19,7 @@ define('_DPS_CURRENCY', 'NZD'); //DEPRECATED - please use the getPaymentOptions 
 class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
 {
     /* checks if a currency is supported by DPS  */
-    function isValidCurrency($currency)
+    public static function isValidCurrency($currency)
     {
         $currencies_str = Jojo::getOption('dps_currencies', 'NZD');
         $currencies = explode(',', $currencies_str);
@@ -31,7 +31,7 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
         return false;
     }
     
-    function getPaymentOptions()
+    public static function getPaymentOptions()
     {
         /* ensure the order currency is the same as DPS currency */
         $currency = call_user_func(array(Jojo_Cart_Class, 'getCartCurrency'));
@@ -63,7 +63,7 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
     /*
     * Determines whether this payment plugin is active for the current payment.
     */
-    function isActive()
+    public static function isActive()
     {
         /* they submitted the form from the checkout page */
         if (Jojo::getFormData('handler', false) == 'dps_pxpay') return true;
@@ -90,9 +90,12 @@ class jojo_plugin_jojo_cart_dps_pxpay extends JOJO_Plugin
     {
         global $page;
         $languageurlprefix = $page->page['pageid'] ? Jojo::getPageUrlPrefix($page->page['pageid']) : $_SESSION['languageurlprefix'];
-        
-        define('DPS_URL', 'https://sec.paymentexpress.com/pxpay/pxaccess.aspx');
-
+        // Set new destination url for PxPay version 2.0 if used
+        if (Jojo::getOption('dps_version', '1')==2) {
+            define('DPS_URL', 'https://sec.paymentexpress.com/pxaccess/pxpay.aspx');
+        } else {
+            define('DPS_URL', 'https://sec.paymentexpress.com/pxpay/pxaccess.aspx');
+        }
         $cart     = call_user_func(array(Jojo_Cart_Class, 'getCart'));
         $testmode = call_user_func(array(Jojo_Cart_Class, 'isTestMode'));
         $token    = Jojo::getFormData('token', false);
